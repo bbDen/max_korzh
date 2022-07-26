@@ -4,7 +4,7 @@ from django.db import models
 User = get_user_model()
 
 
-class ProductCategories(models.Model):
+class ProductCategory(models.Model):
     """Модель для категорий продуктов"""
     title = models.CharField(max_length=50, unique=True, verbose_name='Заголовок')
 
@@ -16,17 +16,18 @@ class ProductCategories(models.Model):
         return self.title
 
 
-class Products(models.Model):
+class Product(models.Model):
     """Модель для продуктов"""
     title = models.CharField(max_length=100, unique=True, verbose_name='Заголовок')
-    category = models.ForeignKey(to=ProductCategories, on_delete=models.CASCADE, related_name='products')
+    category = models.ForeignKey(to=ProductCategory, on_delete=models.CASCADE, related_name='products')
     image = models.ImageField(verbose_name='Изображение')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата размещения')
     quantity = models.IntegerField(verbose_name='Количество')
     price = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Цена')
-    description = models.TextField(max_length=500)
+    description = models.TextField(max_length=500, verbose_name='Описание')
+    gender = models.CharField(max_length=50, verbose_name='Пол', null=True)
     # sale = models.IntegerField(null=True, verbose_name='Скидка')
-    # old_price = models.DecimalField(decimal_places=2, null=True, verbose_name='Цена без скидки')
+    # old_price = models.DecimalField(max_digits=5 ,decimal_places=2, null=True, verbose_name='Цена без скидки')
 
     class Meta:
         verbose_name_plural = 'Товары'
@@ -38,9 +39,9 @@ class Products(models.Model):
 
 class Comment(models.Model):
     """Модель для комментариев """
-    post = models.ForeignKey(to=Products, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='Автор комментария')
-    content = models.TextField(max_length=255,verbose_name='Текст комментария')
+    content = models.TextField(max_length=255, verbose_name='Текст комментария')
     created_at = models.DateTimeField(auto_now_add=True)
     parent = models.ForeignKey(to='self', null=True, blank=True, on_delete=models.CASCADE)
 
@@ -58,3 +59,5 @@ class Comment(models.Model):
         if self.parent is not None:
             return False
         return True
+
+

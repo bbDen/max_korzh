@@ -1,25 +1,18 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
-from apps.products.models import Comment, Products, ProductCategories
+from apps.products.models import Comment, Product, ProductCategory
+
+User = get_user_model()
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    image = SerializerMethodField()
-    category = serializers.PrimaryKeyRelatedField(read_only=True)
+    category = serializers.PrimaryKeyRelatedField(queryset=ProductCategory.objects.all())
 
     class Meta:
-        model = Products
+        model = Product
         fields = ('id', 'title', 'category', 'image', 'price', 'quantity', 'created_at', 'description')
-
-    def get_image(self, obj):
-        try:
-            image = obj.image.url
-        except:
-            image = None
-        return image
-
-    #  qs = Products.objects.prefetch_related('products')
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -43,5 +36,23 @@ class ProductCategoriesSerializer(serializers.ModelSerializer):
     products = ProductSerializer(read_only=True, many=True)
 
     class Meta:
-        model = ProductCategories
+        model = ProductCategory
         fields = ('id', 'title', 'products')
+
+
+class RegistrationSerializer(serializers.ModelSerializer):
+    """ Сериализация регистрации пользователя и создания нового. """
+    password = serializers.CharField(
+        max_length=128,
+        min_length=8,
+        write_only=True
+    )
+
+    token = serializers.CharField(max_length=255, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['email', 'username', 'password', 'token']
+
+    def create(self, validated_data):
+        return User.objects.create_user(**validated_data)
