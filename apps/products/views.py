@@ -132,7 +132,3 @@ class CommentRetrieveAPIView(RetrieveAPIView):
         product.delete()
         return HttpResponse(status=status.HTTP_204_NO_CONTENT)
 
-
-
-class UsersListAPIView(generics.ListCreateAPIView):
-    pass
