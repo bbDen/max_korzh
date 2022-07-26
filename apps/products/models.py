@@ -23,7 +23,7 @@ class Product(models.Model):
     image = models.ImageField(verbose_name='Изображение')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата размещения')
     quantity = models.IntegerField(verbose_name='Количество')
-    price = models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Цена')
+    price = models.IntegerField(verbose_name='Цена')
     description = models.TextField(max_length=500, verbose_name='Описание')
     gender = models.CharField(max_length=50, verbose_name='Пол', null=True)
     # sale = models.IntegerField(null=True, verbose_name='Скидка')
