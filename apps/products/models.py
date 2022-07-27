@@ -20,7 +20,7 @@ class Product(models.Model):
     """Модель для продуктов"""
     title = models.CharField(max_length=100, unique=True, verbose_name='Заголовок')
     category = models.ForeignKey(to=ProductCategory, on_delete=models.CASCADE, related_name='products')
-    image = models.TextField( verbose_name='Изображение')
+    image = models.TextField(verbose_name='Изображение')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата размещения')
     quantity = models.IntegerField(verbose_name='Количество')
     price = models.IntegerField(verbose_name='Цена')
@@ -59,5 +59,3 @@ class Comment(models.Model):
         if self.parent is not None:
             return False
         return True
-
-

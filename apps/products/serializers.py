@@ -8,7 +8,7 @@ User = get_user_model()
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    category = serializers.PrimaryKeyRelatedField(queryset=ProductCategory.objects.all())
+    category = serializers.StringRelatedField()
 
     class Meta:
         model = Product
