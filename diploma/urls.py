@@ -58,6 +58,7 @@ urlpatterns = [
     path('api/v1/comments/', CommentListAPIView.as_view()),
     path('api/v1/comments/<int:pk>', CommentRetrieveAPIView.as_view()),
     path('api-token-auth/', customer_login),
+   # path('api/v1/mobile/products/', MobileProductsListAPIView.as_view()),
     path('api/v1/registration/', RegisterUser.as_view())
 ]
 
