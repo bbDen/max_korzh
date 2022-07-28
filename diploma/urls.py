@@ -19,18 +19,19 @@ from drf_yasg import openapi
 
 from django.contrib import admin
 from django.urls import path, re_path
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+# from rest_framework_simplejwt.views import (
+#     TokenObtainPairView,
+#     TokenRefreshView,
+# )
 from django.views.static import serve
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from apps.products.views import ProductsListAPIView, ProductCategoriesAPIView, ProductRetrieveAPIView, \
-    ProductCategoriesListAPIView, CommentListAPIView, CommentRetrieveAPIView
-from apps.users.views import RegistrationAPIView, LoginAPIView, UserRetrieveUpdateAPIView
+    ProductCategoriesListAPIView, CommentListAPIView, CommentRetrieveAPIView, MobileProductsListAPIView
+#from apps.users.views import RegistrationAPIView, LoginAPIView, UserRetrieveUpdateAPIView
+from apps.users.views import CustomAuthToken
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -56,12 +57,8 @@ urlpatterns = [
     path('api/v1/categories/<int:pk>/', ProductCategoriesAPIView.as_view()),
     path('api/v1/comments/', CommentListAPIView.as_view()),
     path('api/v1/comments/<int:pk>', CommentRetrieveAPIView.as_view()),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/v1/registration/', RegistrationAPIView.as_view()),
-    path('api/v1/login/', LoginAPIView.as_view()),
-    path('api/v1/user', UserRetrieveUpdateAPIView.as_view()),
-
+    path('api-token-auth/', CustomAuthToken.as_view()),
+    path('api/v1/mobile/products/', MobileProductsListAPIView.as_view())
 ]
 
 urlpatterns += staticfiles_urlpatterns()

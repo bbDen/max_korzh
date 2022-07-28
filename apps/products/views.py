@@ -13,12 +13,34 @@ from django.contrib.auth import get_user_model
 from apps.products.models import Product, ProductCategory, Comment
 from apps.products.serializers import ProductSerializer, ProductCategoriesSerializer, CommentSerializer, \
     RegistrationSerializer
+from apps.products.services import PaginationProduct, PaginationMobileProduct
 
 User = get_user_model()
 
 
 class ProductsListAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = PaginationProduct
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['price', 'category']
+    serializer_class = ProductSerializer
+    search_fields = ['title', 'category']
+    ordering_fields = ['price', 'title', 'id', 'created_at']
+    queryset = Product.objects.all()
+
+    def post(self, request):
+        request_body = request.data
+        srz = ProductSerializer(data=request_body)
+        if srz.is_valid():
+            srz.save()
+            return Response(srz.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(srz.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MobileProductsListAPIView(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = PaginationMobileProduct
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['price', 'category']
     serializer_class = ProductSerializer
@@ -131,4 +153,3 @@ class CommentRetrieveAPIView(RetrieveAPIView):
             return JsonResponse({'msg': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
         product.delete()
         return HttpResponse(status=status.HTTP_204_NO_CONTENT)
-
