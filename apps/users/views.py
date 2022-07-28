@@ -58,10 +58,18 @@
 #         serializer.save()
 #
 #         return Response(serializer.data, status=status.HTTP_200_OK)
-
+from django.contrib.auth import get_user_model
+from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from apps.users.serializers import UserSerializer
+
+User = get_user_model()
 
 
 class CustomAuthToken(ObtainAuthToken):
@@ -76,3 +84,40 @@ class CustomAuthToken(ObtainAuthToken):
             'user_id': user.pk,
             'email': user.email
         })
+
+
+class RegisterUser(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        srz = UserSerializer(data=request.data)
+        if srz.is_valid():
+            srz.save()
+            return Response({'response': 'Registered',
+                             'email': srz.data['email'],
+                             'username': srz.data['username'],
+                             'password': srz.data['password']})
+
+
+@api_view(['POST'])
+def customer_login(request):
+
+    data = request.data
+
+    try:
+        email = data['email']
+        password = data['password']
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        user = User.objects.get(email=email, password=password)
+    except:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    try:
+        user_token = user.auth_token.key
+    except:
+        user_token = Token.objects.create(user=user)
+
+    data = {'token': user_token}
+    return Response(data=data, status=status.HTTP_200_OK)

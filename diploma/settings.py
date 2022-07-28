@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     'corsheaders',
-    'social_django',
     # my apps
     'apps.products',
     'apps.users',
