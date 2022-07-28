@@ -129,7 +129,7 @@ class RegisterUser(APIView):
 def customer_login(request):
     data = request.data
 
-    print(User.objects.values_list('email', flat=True))
+   # print(User.objects.values_list('email', flat=True))
 
     try:
         email = data['email']
