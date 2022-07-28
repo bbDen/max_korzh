@@ -27,6 +27,7 @@ from django.views.static import serve
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from rest_framework.authtoken.views import obtain_auth_token
 
 from apps.products.views import ProductsListAPIView, ProductCategoriesAPIView, ProductRetrieveAPIView, \
     ProductCategoriesListAPIView, CommentListAPIView, CommentRetrieveAPIView
@@ -57,7 +58,8 @@ urlpatterns = [
     path('api/v1/categories/<int:pk>/', ProductCategoriesAPIView.as_view()),
     path('api/v1/comments/', CommentListAPIView.as_view()),
     path('api/v1/comments/<int:pk>', CommentRetrieveAPIView.as_view()),
-    path('api-token-auth/', customer_login),
+    # path('api-token-auth/', customer_login),
+    path('api-token-auth/', CustomAuthToken.as_view()),
    # path('api/v1/mobile/products/', MobileProductsListAPIView.as_view()),
     path('api/v1/registration/', RegisterUser.as_view())
 ]

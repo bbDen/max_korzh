@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, AbstractUser
 
 from django.db import models
 from django.db.models.signals import post_save
@@ -9,6 +9,7 @@ from rest_framework.authtoken.models import Token
 from apps.users.managers import UserManager
 
 
+AbstractUser
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(db_index=True, max_length=255, unique=True)
     email = models.EmailField(db_index=True, unique=True)
