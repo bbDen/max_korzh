@@ -125,7 +125,7 @@ class RegisterUser(APIView):
 
 
 @api_view(['POST'])
-@permission_classes((AllowAny,))
+@permission_classes(AllowAny)
 def customer_login(request):
     data = request.data
 
