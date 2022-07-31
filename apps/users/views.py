@@ -28,7 +28,7 @@ class RegisterUser(APIView):
         if srz.is_valid():
             print(srz.validated_data)
             srz.save()
-            return Response(srz.data)
+            return Response(srz.data, {'Response': 'Registered'})
 
 
 
