@@ -17,32 +17,30 @@ class CustomAuthToken(ObtainAuthToken, APIView):
     def post(self, request):
         srz = UserAuthSerializer(data=request.data)
         return Response(data={'response': "Registered",
-                              'email': srz.validated_data['email'],
-                              'username': srz.validated_data['username'],
-                              'last_name': srz.validated_data['last_name'],
-                              'phone_number': srz.validated_data['phone_number'],
-                              'first_name': srz.validated_data['first_name'],
-                              'date_of_birth': srz.validated_data['date_of_birth'],
+                              'email': srz.data['email'],
+                              'username': srz.data['username'],
+                              'last_name': srz.data['last_name'],
+                              'phone_number': srz.data['phone_number'],
+                              'first_name': srz.data['first_name'],
+                              'date_of_birth': srz.data['date_of_birth'],
                               })
 
 
 class RegisterUser(APIView):
     permission_classes = [AllowAny]
-    serializer_class = UserSerializer
 
     def post(self, request):
         srz = UserSerializer(data=request.data)
         if srz.is_valid():
             srz.save()
-            return Response(data={'response': "Registered",
-                                  'email': srz.validated_data['email'],
-                                  'username': srz.validated_data['username'],
-                                  'last_name': srz.validated_data['last_name'],
-                                  'phone_number': srz.validated_data['phone_number'],
-                                  'first_name': srz.validated_data['first_name'],
-                                  'date_of_birth': srz.validated_data['date_of_birth'],
-                                  'password': srz.validated_data['password'],
-                                  })
+            return Response({'response': "Registered",
+                             'email': srz.data['email'],
+                             'username': srz.data['username'],
+                             'last_name': srz.data['last_name'],
+                             'phone_number': srz.data['phone_number'],
+                             'first_name': srz.data['first_name'],
+                             'date_of_birth': srz.data['date_of_birth'],
+                             'password': srz.data['password']})
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
