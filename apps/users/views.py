@@ -41,6 +41,7 @@ class RegisterUser(APIView):
                                   'phone_number': srz.validated_data['phone_number'],
                                   'first_name': srz.validated_data['first_name'],
                                   'date_of_birth': srz.validated_data['date_of_birth'],
+                                  'password': srz.validated_data['password'],
                                   })
 
 
