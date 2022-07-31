@@ -22,6 +22,7 @@ class CustomAuthToken(ObtainAuthToken, APIView):
                               'last_name': srz.validated_data['last_name'],
                               'phone_number': srz.validated_data['phone_number'],
                               'first_name': srz.validated_data['first_name'],
+                              'date_of_birth': srz.validated_data['date_of_birth'],
                               })
 
 
@@ -39,6 +40,7 @@ class RegisterUser(APIView):
                                   'last_name': srz.validated_data['last_name'],
                                   'phone_number': srz.validated_data['phone_number'],
                                   'first_name': srz.validated_data['first_name'],
+                                  'date_of_birth': srz.validated_data['date_of_birth'],
                                   })
 
 
