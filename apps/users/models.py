@@ -16,7 +16,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(db_index=True, unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    date_of_birth = models.DateTimeField(verbose_name='Дата рождения', null=True)
+    date_of_birth = models.DateField(verbose_name='Дата рождения', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     phone_number = models.CharField(max_length=255,  unique=True, null=True)
