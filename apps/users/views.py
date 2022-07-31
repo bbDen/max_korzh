@@ -11,38 +11,25 @@ from apps.users.serializers import UserSerializer, UserAuthSerializer
 User = get_user_model()
 
 
-class CustomAuthToken(ObtainAuthToken):
+class CustomAuthToken(ObtainAuthToken, APIView):
     serializer_class = UserAuthSerializer
 
     def post(self, request):
         srz = UserAuthSerializer(data=request.data)
-        return Response({'response': 'Logged in',
-                         'email': srz.data['email'],
-                         'username': srz.data['username'],
-                         'password': srz.data['password'],
-                         'last_name': srz.data['last_name'],
-                         'first_name': srz.data['first_name'],
-                         'number': srz.data['number'],
-                         'date_of_birth': srz.data['date_of_birth']
-                         })
+        return Response(srz.data)
 
 
 class RegisterUser(APIView):
     permission_classes = [AllowAny]
+    serializer_class = UserSerializer
 
     def post(self, request):
         srz = UserSerializer(data=request.data)
         if srz.is_valid():
+            print(srz.validated_data)
             srz.save()
-            return Response({'response': 'Registered',
-                             'email': srz.data['email'],
-                             'username': srz.data['username'],
-                             'password': srz.data['password'],
-                             'last_name': srz.data['last_name'],
-                             'first_name': srz.data['first_name'],
-                             'number': srz.data['number'],
-                             'date_of_birth': srz.data['date_of_birth']}
-                            )
+            return Response(srz.data)
+
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
