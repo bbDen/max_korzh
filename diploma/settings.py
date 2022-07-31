@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-stiov+84od!kfx^)igmzy=7h)r9-)vj!1@!8(eg@101oxabw$0
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CORS_ORIGIN_WHITELIST = ['*']
+CORS_ORIGIN_WHITELIST = ['https://max-korzh-merch.herokuapp.com']
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
