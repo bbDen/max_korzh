@@ -31,8 +31,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from apps.products.views import ProductsListAPIView, ProductCategoriesAPIView, ProductRetrieveAPIView, \
     ProductCategoriesListAPIView, CommentListAPIView, CommentRetrieveAPIView
-#from apps.users.views import RegistrationAPIView, LoginAPIView, UserRetrieveUpdateAPIView
-from apps.users.views import CustomAuthToken, RegisterUser, customer_login
+from apps.users.views import CustomAuthToken, RegisterUser, UserRetrieveUpdateAPIView, UsersListAPIView
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -58,10 +57,10 @@ urlpatterns = [
     path('api/v1/categories/<int:pk>/', ProductCategoriesAPIView.as_view()),
     path('api/v1/comments/', CommentListAPIView.as_view()),
     path('api/v1/comments/<int:pk>', CommentRetrieveAPIView.as_view()),
-    # path('api-token-auth/', customer_login),
     path('api-token-auth/', CustomAuthToken.as_view()),
-   # path('api/v1/mobile/products/', MobileProductsListAPIView.as_view()),
-    path('api/v1/registration/', RegisterUser.as_view())
+    path('api/v1/registration/', RegisterUser.as_view()),
+    path('api/v1/users/', UserRetrieveUpdateAPIView.as_view()),
+    path('api/v1/user/', UsersListAPIView.as_view()),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
