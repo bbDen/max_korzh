@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from rest_framework import status, generics
 from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.generics import RetrieveAPIView, RetrieveUpdateAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -16,7 +16,13 @@ class CustomAuthToken(ObtainAuthToken, APIView):
 
     def post(self, request):
         srz = UserAuthSerializer(data=request.data)
-        return Response(srz.data)
+        return Response(data={'response': "Registered",
+                              'email': srz.validated_data['email'],
+                              'username': srz.validated_data['username'],
+                              'last_name': srz.validated_data['last_name'],
+                              'phone_number': srz.validated_data['phone_number'],
+                              'first_name': srz.validated_data['first_name'],
+                              })
 
 
 class RegisterUser(APIView):
@@ -26,10 +32,14 @@ class RegisterUser(APIView):
     def post(self, request):
         srz = UserSerializer(data=request.data)
         if srz.is_valid():
-            print(srz.validated_data)
             srz.save()
-            return Response(srz.data, {'Response': 'Registered'})
-
+            return Response(data={'response': "Registered",
+                                  'email': srz.validated_data['email'],
+                                  'username': srz.validated_data['username'],
+                                  'last_name': srz.validated_data['last_name'],
+                                  'phone_number': srz.validated_data['phone_number'],
+                                  'first_name': srz.validated_data['first_name'],
+                                  })
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
