@@ -17,6 +17,10 @@ class UserAuthSerializer(serializers.Serializer):
     email = serializers.EmailField(
         write_only=True
     )
+    username = serializers.CharField(
+        required=False,
+        read_only=True
+    )
     password = serializers.CharField(
         style={'input_type': 'password'},
         trim_whitespace=False,
@@ -27,6 +31,7 @@ class UserAuthSerializer(serializers.Serializer):
     )
 
     def validate(self, attrs):
+        print(attrs)
         email = attrs.get('email')
         password = attrs.get('password')
 
