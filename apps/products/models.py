@@ -27,7 +27,7 @@ class Product(models.Model):
     description = models.TextField(max_length=500, verbose_name='Описание')
     gender = models.CharField(max_length=50, verbose_name='Пол', null=True)
     sale = models.IntegerField(null=True, verbose_name='Скидка')
-    old_price = models.DecimalField(max_digits=5, decimal_places=2, null=True, verbose_name='Цена без скидки')
+    old_price = models.IntegerField(null=True, verbose_name='Цена без скидки')
 
     class Meta:
         verbose_name_plural = 'Товары'
