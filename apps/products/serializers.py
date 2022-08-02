@@ -2,17 +2,20 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
-from apps.products.models import Comment, Product, ProductCategory, TestModel
+from apps.products.models import Comment, Product, ProductCategory
 
 User = get_user_model()
 
 
-class TestModelSerializer(serializers.ModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):
+    category = serializers.StringRelatedField()
     image = SerializerMethodField()
-    music = SerializerMethodField()
+
     class Meta:
-        model = TestModel
-        fields = '__all__'
+        model = Product
+        fields = ('id', 'title', 'category', 'image', 'price', 'quantity', 'created_at', 'description', 'gender',
+                  'old_price', 'sale'
+                  )
 
     def get_image(self, obj):
         try:
@@ -20,23 +23,6 @@ class TestModelSerializer(serializers.ModelSerializer):
         except:
             image = None
         return image
-
-    def get_music(self, obj):
-        try:
-            music = obj.music.url
-        except:
-            music = None
-        return music
-
-
-class ProductSerializer(serializers.ModelSerializer):
-    category = serializers.StringRelatedField()
-
-    class Meta:
-        model = Product
-        fields = ('id', 'title', 'category', 'image', 'price', 'quantity', 'created_at', 'description', 'gender',
-                  'old_price', 'sale'
-                  )
 
 
 class CommentSerializer(serializers.ModelSerializer):

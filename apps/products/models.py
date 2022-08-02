@@ -10,7 +10,7 @@ class ProductCategory(models.Model):
 
     class Meta:
         verbose_name_plural = 'Категории товаров'
-        verbose_name = 'Категория товра'
+        verbose_name = 'Категория товара'
 
     def __str__(self):
         return self.title
@@ -20,14 +20,14 @@ class Product(models.Model):
     """Модель для продуктов"""
     title = models.CharField(max_length=100, unique=True, verbose_name='Заголовок')
     category = models.ForeignKey(to=ProductCategory, on_delete=models.CASCADE, related_name='products')
-    image = models.TextField(verbose_name='Изображение')
+    image = models.ImageField(verbose_name='Изображение')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата размещения')
     quantity = models.IntegerField(verbose_name='Количество')
     price = models.IntegerField(verbose_name='Цена')
     description = models.TextField(max_length=500, verbose_name='Описание')
     gender = models.CharField(max_length=50, verbose_name='Пол', null=True)
-    sale = models.IntegerField(null=True, verbose_name='Скидка')
-    old_price = models.IntegerField(null=True, verbose_name='Цена без скидки')
+    sale = models.IntegerField(null=True, verbose_name='Скидка', blank=True)
+    old_price = models.IntegerField(null=True, verbose_name='Цена без скидки', blank=True)
 
     class Meta:
         verbose_name_plural = 'Товары'
@@ -59,12 +59,3 @@ class Comment(models.Model):
         if self.parent is not None:
             return False
         return True
-
-
-class TestModel(models.Model):
-    test_image = models.ImageField()
-    test_music = models.FileField(null=True)
-
-    class Meta:
-        verbose_name_plural = 'Тестовая модель'
-        verbose_name = 'Тестовая модель'

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.products.models import Product, ProductCategory, TestModel
+from apps.products.models import Product, ProductCategory
 
 
 @admin.register(Product)
@@ -11,9 +11,3 @@ class ProductsAdmin(admin.ModelAdmin):
 @admin.register(ProductCategory)
 class ProductCategoriesAdmin(admin.ModelAdmin):
     pass
-
-
-@admin.register(TestModel)
-class TestModelAdmin(admin.ModelAdmin):
-    pass
-

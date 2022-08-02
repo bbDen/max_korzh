@@ -50,13 +50,13 @@ class RegisterUser(APIView):
             user.set_password(password)
             user.save()
             return Response({'response': "Registered",
-                             'email': srz.data['email'],
                              'username': srz.data['username'],
+                             'password': srz.data['password'],
+                             'email': srz.data['email'],
+                             'first_name': srz.data['first_name'],
                              'last_name': srz.data['last_name'],
                              'phone_number': srz.data['phone_number'],
-                             'first_name': srz.data['first_name'],
-                             'date_of_birth': srz.data['date_of_birth'],
-                             'password': srz.data['password']})
+                             'date_of_birth': srz.data['date_of_birth']})
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):

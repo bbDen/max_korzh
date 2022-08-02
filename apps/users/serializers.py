@@ -6,11 +6,7 @@ User = get_user_model()
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    password = serializers.CharField(
-        write_only=True,
-        min_length=8,
-        max_length=128
-    )
+    password = serializers.CharField(min_length=8, max_length=64)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -19,6 +15,14 @@ class UserSerializer(serializers.ModelSerializer):
         fields = [
             'username', 'password', 'email', 'first_name', 'last_name', 'phone_number', 'date_of_birth'
         ]
+
+    def save(self, **kwargs):
+        print(**kwargs)
+        password = kwargs.pop('password')
+        user = User(**kwargs)
+        user.set_password(password)
+        user.save()
+        return user
 
 
 class UserAuthSerializer(serializers.Serializer):
