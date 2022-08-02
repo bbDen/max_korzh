@@ -5,17 +5,18 @@ from apps.music.models import Music
 
 
 class MusicSerializer(serializers.ModelSerializer):
-    track = SerializerMethodField()
+    music = SerializerMethodField()
+
     class Meta:
         model = Music
-        fields = ('title', 'track')
+        fields = '__all__'
 
-    def get_track(self, obj):
+    def get_music(self, obj):
         try:
-            track = obj.track.url
+            music = obj.music.url
         except:
-            track = None
-        return track
+            music = None
+        return music
 
 
 
