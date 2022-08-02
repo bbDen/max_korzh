@@ -5,6 +5,14 @@ from django.utils.translation import gettext_lazy as _
 User = get_user_model()
 
 
+class ChangePasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(
+        write_only=True,
+        min_length=8,
+        max_length=128
+    )
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -17,10 +25,6 @@ class UserAuthSerializer(serializers.Serializer):
     email = serializers.EmailField(
         write_only=True
     )
-    username = serializers.CharField(
-        required=False,
-        read_only=True
-    )
     password = serializers.CharField(
         style={'input_type': 'password'},
         trim_whitespace=False,
@@ -31,7 +35,6 @@ class UserAuthSerializer(serializers.Serializer):
     )
 
     def validate(self, attrs):
-        print(attrs)
         email = attrs.get('email')
         password = attrs.get('password')
 

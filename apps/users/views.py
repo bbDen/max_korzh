@@ -3,11 +3,11 @@ from rest_framework import status, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.generics import RetrieveUpdateAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.users.serializers import UserSerializer, UserAuthSerializer
+from apps.users.serializers import UserSerializer, UserAuthSerializer, ChangePasswordSerializer
 
 User = get_user_model()
 
@@ -25,13 +25,30 @@ class CustomAuthToken(ObtainAuthToken):
                          'date_of_birth': user.date_of_birth, 'phone_number': user.phone_number})
 
 
+class ChangePassword(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        srz = ChangePasswordSerializer(data=request.data)
+        if srz.is_valid():
+            password = srz.validated_data.pop('password')
+            user = User(**srz.validated_data)
+            user.set_password(password)
+            user.save()
+            return Response(status=status.HTTP_200_OK)
+
+
+
 class RegisterUser(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
         srz = UserSerializer(data=request.data)
         if srz.is_valid():
-            srz.save()
+            password = srz.validated_data.pop('password')
+            user = User(**srz.validated_data)
+            user.set_password(password)
+            user.save()
             return Response({'response': "Registered",
                              'email': srz.data['email'],
                              'username': srz.data['username'],
@@ -43,7 +60,7 @@ class RegisterUser(APIView):
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
 
     def retrieve(self, request, *args, **kwargs):
@@ -51,8 +68,8 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def update(self, request, pk):
-        serializer_data = request.data.get(id=pk)
+    def update(self, request):
+        serializer_data = request.data.get()
         serializer = self.serializer_class(
             request.user, data=serializer_data, partial=True
         )
