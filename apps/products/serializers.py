@@ -9,7 +9,7 @@ User = get_user_model()
 
 class TestModelSerializer(serializers.ModelSerializer):
     image = SerializerMethodField()
-
+    music = SerializerMethodField()
     class Meta:
         model = TestModel
         fields = '__all__'
@@ -20,6 +20,13 @@ class TestModelSerializer(serializers.ModelSerializer):
         except:
             image = None
         return image
+
+    def get_music(self, obj):
+        try:
+            music = obj.music.url
+        except:
+            music = None
+        return music
 
 
 class ProductSerializer(serializers.ModelSerializer):

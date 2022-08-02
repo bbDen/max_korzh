@@ -63,6 +63,7 @@ class Comment(models.Model):
 
 class TestModel(models.Model):
     test_image = models.ImageField()
+    test_music = models.FileField(null=True)
 
     class Meta:
         verbose_name_plural = 'Тестовая модель'
