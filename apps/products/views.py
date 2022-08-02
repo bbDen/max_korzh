@@ -8,9 +8,9 @@ from rest_framework.response import Response
 
 from django.contrib.auth import get_user_model
 
-from apps.products.models import Product, ProductCategory, Comment
+from apps.products.models import Product, ProductCategory, Comment, TestModel
 from apps.products.serializers import ProductSerializer, ProductCategoriesSerializer, CommentSerializer, \
-    RegistrationSerializer
+    RegistrationSerializer, TestModelSerializer
 from apps.products.services import PaginationProduct
 
 User = get_user_model()
@@ -131,3 +131,9 @@ class CommentRetrieveAPIView(RetrieveAPIView):
             return JsonResponse({'msg': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
         product.delete()
         return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+
+
+class TestModelApiView(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = TestModelSerializer
+    queryset = TestModel.objects.all()

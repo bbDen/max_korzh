@@ -10,7 +10,7 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from apps.products.views import ProductsListAPIView, ProductCategoriesAPIView, ProductRetrieveAPIView, \
-    ProductCategoriesListAPIView, CommentListAPIView, CommentRetrieveAPIView
+    ProductCategoriesListAPIView, CommentListAPIView, CommentRetrieveAPIView, TestModelApiView
 from apps.users.views import CustomAuthToken, RegisterUser, UserRetrieveUpdateAPIView, UsersListAPIView, ChangePassword
 
 schema_view = get_schema_view(
@@ -41,7 +41,8 @@ urlpatterns = [
     path('api/v1/registration/', RegisterUser.as_view()),
     path('api/v1/users/', UserRetrieveUpdateAPIView.as_view()),
     path('api/v1/user/', UsersListAPIView.as_view()),
-    path('api/v1/chengepassword/', ChangePassword.as_view())
+    path('api/v1/chengepassword/', ChangePassword.as_view()),
+    path('testURL/', TestModelApiView.as_view())
 ]
 
 urlpatterns += staticfiles_urlpatterns()

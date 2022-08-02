@@ -2,9 +2,24 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
-from apps.products.models import Comment, Product, ProductCategory
+from apps.products.models import Comment, Product, ProductCategory, TestModel
 
 User = get_user_model()
+
+
+class TestModelSerializer(serializers.ModelSerializer):
+    image = SerializerMethodField()
+
+    class Meta:
+        model = TestModel
+        fields = '__all__'
+
+    def get_image(self, obj):
+        try:
+            image = obj.image.url
+        except:
+            image = None
+        return image
 
 
 class ProductSerializer(serializers.ModelSerializer):

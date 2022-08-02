@@ -18,7 +18,6 @@ CORS_ORIGIN_WHITELIST = ['https://max-korzh-merch.herokuapp.com']
 
 CORS_ALLOWED_ORIGINS = [
     'https://max-korzh-merch.herokuapp.com',
-    "https://api.domain.com",
     "http://localhost:3000",
     "http://127.0.0.1:9000"
 ]
@@ -89,7 +88,7 @@ ROOT_URLCONF = 'diploma.urls'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 1,
+    'PAGE_SIZE': 10,
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',

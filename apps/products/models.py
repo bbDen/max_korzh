@@ -59,3 +59,11 @@ class Comment(models.Model):
         if self.parent is not None:
             return False
         return True
+
+
+class TestModel(models.Model):
+    test_image = models.ImageField()
+
+    class Meta:
+        verbose_name_plural = 'Тестовая модель'
+        verbose_name = 'Тестовая модель'
