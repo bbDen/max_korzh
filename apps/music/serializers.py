@@ -5,7 +5,6 @@ from apps.music.models import Music
 
 
 class MusicSerializer(serializers.ModelSerializer):
-    music = SerializerMethodField()
 
     class Meta:
         model = Music
