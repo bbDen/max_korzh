@@ -171,3 +171,12 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 AUTH_USER_MODEL = 'users.User'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'denistestemail313@gmail.com'
+EMAIL_HOST_PASSWORD = 'kqowgbgtbzkyciuo'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Reset password <noreply@denis_meshcheriakov.com>'

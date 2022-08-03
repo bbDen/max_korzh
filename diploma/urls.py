@@ -12,7 +12,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from apps.music.views import MusicListAPIView
 from apps.products.views import ProductsListAPIView, ProductCategoriesAPIView, ProductRetrieveAPIView, \
     ProductCategoriesListAPIView, CommentListAPIView, CommentRetrieveAPIView
-from apps.users.views import CustomAuthToken, RegisterUser, UserRetrieveUpdateAPIView, UsersListAPIView, ChangePassword
+from apps.users.views import CustomAuthToken, RegisterUser, UserRetrieveUpdateAPIView, UsersListAPIView, \
+    ChangePasswordView
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -42,7 +43,7 @@ urlpatterns = [
     path('api/v1/registration/', RegisterUser.as_view()),
     path('api/v1/users/', UserRetrieveUpdateAPIView.as_view()),
     path('api/v1/user/', UsersListAPIView.as_view()),
-    path('api/v1/changepassword/', ChangePassword.as_view()),
+    path('api/v1/changepassword/', ChangePasswordView.as_view()),
     path('api/v1/music/', MusicListAPIView.as_view())
 ]
 

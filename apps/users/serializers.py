@@ -1,16 +1,55 @@
 from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
 
 
-class ChangePasswordSerializer(serializers.Serializer):
-    password = serializers.CharField(min_length=8, max_length=64)
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password2 = serializers.CharField(write_only=True, required=True)
+
+    class Meta:
+        model = User
+        fields = ('old_password', 'password', 'password2')
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "Password fields didn't match."})
+
+        return attrs
+
+    def update(self, instance, validated_data):
+
+        instance.set_password(validated_data['password'])
+        instance.save()
+
+        return instance
+
+class RegistrationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = [
+            'username', 'password', 'email', 'first_name', 'last_name', 'phone_number', 'date_of_birth'
+        ]
+
+    def save(self):
+        user = User(email=self.validated_data['email'],
+                    username=self.validated_data['username'],
+                    phone_number=self.validated_data['phone_number'],
+                    first_name=self.validated_data['first_name'],
+                    last_name=self.validated_data['last_name'],
+                    date_of_birth=self.validated_data['date_of_birth'])
+        password = self.validated_data['password']
+        user.set_password(password)
+        user.save()
+        return user
+
 
 
 class UserSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = User
         fields = [

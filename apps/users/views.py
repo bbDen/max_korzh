@@ -7,7 +7,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.users.serializers import UserSerializer, UserAuthSerializer, ChangePasswordSerializer
+from apps.users.serializers import UserSerializer, UserAuthSerializer, ChangePasswordSerializer, RegistrationSerializer
 
 User = get_user_model()
 
@@ -25,38 +25,28 @@ class CustomAuthToken(ObtainAuthToken):
                          'date_of_birth': user.date_of_birth, 'phone_number': user.phone_number})
 
 
-class ChangePassword(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        srz = ChangePasswordSerializer(data=request.data)
-        if srz.is_valid():
-            password = srz.validated_data.pop('password')
-            user = User(**srz.validated_data)
-            user.set_password(password)
-            user.save()
-            return Response(status=status.HTTP_200_OK)
-
+class ChangePasswordView(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ChangePasswordSerializer
 
 
 class RegisterUser(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        srz = UserSerializer(data=request.data)
+        srz = RegistrationSerializer(data=request.data)
         if srz.is_valid():
-            password = srz.validated_data.pop('password')
-            user = User(**srz.validated_data)
-            user.set_password(password)
-            user.save()
+            srz.save()
             return Response({'response': "Registered",
                              'username': srz.data['username'],
-                             'password': srz.data['password'],
                              'email': srz.data['email'],
                              'first_name': srz.data['first_name'],
                              'last_name': srz.data['last_name'],
                              'phone_number': srz.data['phone_number'],
                              'date_of_birth': srz.data['date_of_birth']})
+        else:
+            return Response(data=srz.errors)
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
