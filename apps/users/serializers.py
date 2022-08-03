@@ -21,14 +21,13 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         return attrs
 
     def update(self, instance, validated_data):
-
         instance.set_password(validated_data['password'])
         instance.save()
 
         return instance
 
-class RegistrationSerializer(serializers.ModelSerializer):
 
+class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
@@ -36,17 +35,16 @@ class RegistrationSerializer(serializers.ModelSerializer):
         ]
 
     def save(self):
-        user = User(email=self.validated_data['email'],
-                    username=self.validated_data['username'],
-                    phone_number=self.validated_data['phone_number'],
-                    first_name=self.validated_data['first_name'],
-                    last_name=self.validated_data['last_name'],
-                    date_of_birth=self.validated_data['date_of_birth'])
-        password = self.validated_data['password']
+        user = User(email=self.data['email'],
+                    username=self.data['username'],
+                    phone_number=self.data['phone_number'],
+                    first_name=self.data['first_name'],
+                    last_name=self.data['last_name'],
+                    date_of_birth=self.data['date_of_birth'])
+        password = self.data['password']
         user.set_password(password)
         user.save()
         return user
-
 
 
 class UserSerializer(serializers.ModelSerializer):
