@@ -16,13 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
             'username', 'password', 'email', 'first_name', 'last_name', 'phone_number', 'date_of_birth'
         ]
 
-    def save(self, **kwargs):
-        print(**kwargs)
-        password = kwargs.pop('password')
-        user = User(**kwargs)
-        user.set_password(password)
-        user.save()
-        return user
+
 
 
 class UserAuthSerializer(serializers.Serializer):

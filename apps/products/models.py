@@ -30,6 +30,7 @@ class Product(models.Model):
     gender = models.CharField(max_length=50, verbose_name='Пол', null=True)
     sale = models.IntegerField(null=True, verbose_name='Скидка', blank=True)
     old_price = models.IntegerField(null=True, verbose_name='Цена без скидки', blank=True)
+    new = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = 'Товары'
