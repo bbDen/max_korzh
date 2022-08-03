@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
-from phonenumber_field.modelfields import PhoneNumberField
+from phonenumber_field.validators import validate_international_phonenumber
 
 from apps.users.managers import UserManager
 
@@ -20,7 +20,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_of_birth = models.DateField(verbose_name='Дата рождения', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    phone_number = PhoneNumberField(max_length=255,  unique=True, null=True)
+    phone_number = models.CharField(max_length=15, validators=[validate_international_phonenumber], unique=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
