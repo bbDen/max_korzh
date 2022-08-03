@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth import get_user_model
 from django.db import models
 
@@ -35,6 +37,9 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+    def set_null(self):
+        now = datetime.datetime.now()
 
 
 class Comment(models.Model):

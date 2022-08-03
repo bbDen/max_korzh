@@ -41,7 +41,7 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-# Application definition
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     'corsheaders',
+    'phonenumber_field',
     # my apps
     'apps.products',
     'apps.users',
@@ -144,6 +145,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+PHONENUMBER_DEFAULT_REGION = 'KG'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/

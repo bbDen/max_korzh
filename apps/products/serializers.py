@@ -9,7 +9,6 @@ User = get_user_model()
 
 class ProductSerializer(serializers.ModelSerializer):
     category = serializers.StringRelatedField()
-    image = SerializerMethodField()
 
     class Meta:
         model = Product
