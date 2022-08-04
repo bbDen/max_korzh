@@ -3,14 +3,13 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import status, generics, filters
 from rest_framework.generics import RetrieveAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from django.contrib.auth import get_user_model
 
 from apps.products.models import Product, ProductCategory, Comment
-from apps.products.serializers import ProductSerializer, ProductCategoriesSerializer, CommentSerializer, \
-    RegistrationSerializer
+from apps.products.serializers import ProductSerializer, ProductCategoriesSerializer, CommentSerializer
 from apps.products.services import PaginationProduct
 
 User = get_user_model()

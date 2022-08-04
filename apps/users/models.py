@@ -10,6 +10,19 @@ from phonenumber_field.validators import validate_international_phonenumber
 from apps.users.managers import UserManager
 
 
+class Order(models.Model):
+    address = models.TextField(verbose_name='Адрес доставки')
+    city = models.TextField(verbose_name='Город доставки')
+    country = models.TextField(verbose_name='Страна доставки')
+
+    class Meta:
+        verbose_name_plural = 'Заказы'
+        verbose_name = 'Заказ'
+
+    def __str__(self):
+        return self.address
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255, null=True)
     last_name = models.CharField(max_length=255, null=True)
@@ -21,6 +34,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     phone_number = models.CharField(max_length=15, validators=[validate_international_phonenumber], unique=True)
+   # customer = models.ForeignKey(to=Order, on_delete=models.CASCADE, verbose_name='Заказ')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']

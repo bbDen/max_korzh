@@ -30,6 +30,13 @@ class ChangePasswordView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = ChangePasswordSerializer
 
+    def put(self, request):
+        serializer = self.serializer_class(
+            request.user, data=request.data, partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'response': "Password changed"})
 
 class RegisterUser(APIView):
     permission_classes = [AllowAny]

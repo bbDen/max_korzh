@@ -39,9 +39,6 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
-    def set_null(self):
-        now = datetime.datetime.now()
-
 
 class Comment(models.Model):
     """Модель для комментариев """
