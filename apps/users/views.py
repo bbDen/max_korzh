@@ -38,6 +38,7 @@ class ChangePasswordView(generics.UpdateAPIView):
         serializer.save()
         return Response({'response': "Password changed"})
 
+
 class RegisterUser(APIView):
     permission_classes = [AllowAny]
 
