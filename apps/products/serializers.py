@@ -8,12 +8,12 @@ User = get_user_model()
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    category = serializers.StringRelatedField()
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = ('id', 'title', 'category', 'image', 'price', 'quantity', 'created_at', 'description', 'gender',
-                  'old_price', 'sale'
+                  'sizes', 'sale'
                   )
 
     def get_image(self, obj):
@@ -22,6 +22,11 @@ class ProductSerializer(serializers.ModelSerializer):
         except:
             image = None
         return image
+
+    def to_representation(self, instance):
+        repres = super(ProductSerializer, self).to_representation(instance)
+        repres['category'] = instance.category.title
+        return repres
 
 
 class CommentSerializer(serializers.ModelSerializer):

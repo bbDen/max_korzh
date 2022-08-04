@@ -1,7 +1,8 @@
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
-from rest_framework.response import Response
+
+from apps.users.models import Order
 
 User = get_user_model()
 
@@ -86,3 +87,16 @@ class UserAuthSerializer(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = (
+            'address', 'country', 'city', 'customer'
+        )
+
+    def to_representation(self, instance):
+        repres = super(OrderSerializer, self).to_representation(instance)
+        repres['customer'] = instance.customer.email
+        return repres

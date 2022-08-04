@@ -3,21 +3,22 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import status, generics, filters
 from rest_framework.generics import RetrieveAPIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.response import Response
 
 from django.contrib.auth import get_user_model
 
 from apps.products.models import Product, ProductCategory, Comment
 from apps.products.serializers import ProductSerializer, ProductCategoriesSerializer, CommentSerializer
-from apps.products.services import PaginationProduct
+from apps.users.models import Order
+from apps.users.serializers import OrderSerializer
+from apps.users.services import send_email_to_user
 
 User = get_user_model()
 
 
 class ProductsListAPIView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    pagination_class = PaginationProduct
+    permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['price', 'category']
     serializer_class = ProductSerializer
@@ -130,3 +131,24 @@ class CommentRetrieveAPIView(RetrieveAPIView):
             return JsonResponse({'msg': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
         product.delete()
         return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+
+
+class OrdersListAPIView(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+
+    def post(self, request):
+        request_body = request.data
+        srz = OrderSerializer(data=request_body)
+        if srz.is_valid():
+            srz.save()
+        else:
+            return False
+        message = 'Hello world'
+        send_email_to_user(email=srz.validated_data['customer'], message=message)
+        return Response(srz.data, status=status.HTTP_200_OK)
+        #     return Response(srz.data, status=status.HTTP_201_CREATED)
+        # else:
+        #     return Response(srz.errors, status=status.HTTP_400_BAD_REQUEST)
+

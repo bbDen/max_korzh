@@ -3,6 +3,8 @@ import datetime
 from django.contrib.auth import get_user_model
 from django.db import models
 
+from apps.products.choices import SizeChoices
+
 User = get_user_model()
 
 
@@ -29,8 +31,8 @@ class Product(models.Model):
     description = models.TextField(max_length=500, verbose_name='Описание')
     gender = models.CharField(max_length=50, verbose_name='Пол', null=True)
     sale = models.IntegerField(null=True, verbose_name='Скидка', blank=True)
-    old_price = models.IntegerField(null=True, verbose_name='Цена без скидки', blank=True)
     new = models.BooleanField(default=True)
+    sizes = models.CharField(choices=SizeChoices, default=SizeChoices[1][1], max_length=5)
 
     class Meta:
         verbose_name_plural = 'Товары'

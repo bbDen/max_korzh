@@ -10,19 +10,6 @@ from phonenumber_field.validators import validate_international_phonenumber
 from apps.users.managers import UserManager
 
 
-class Order(models.Model):
-    address = models.TextField(verbose_name='Адрес доставки')
-    city = models.TextField(verbose_name='Город доставки')
-    country = models.TextField(verbose_name='Страна доставки')
-
-    class Meta:
-        verbose_name_plural = 'Заказы'
-        verbose_name = 'Заказ'
-
-    def __str__(self):
-        return self.address
-
-
 class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255, null=True)
     last_name = models.CharField(max_length=255, null=True)
@@ -33,8 +20,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_of_birth = models.DateField(verbose_name='Дата рождения', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    phone_number = models.CharField(max_length=15, validators=[validate_international_phonenumber], unique=True)
-   # customer = models.ForeignKey(to=Order, on_delete=models.CASCADE, verbose_name='Заказ')
+    phone_number = models.CharField(max_length=15, validators=[validate_international_phonenumber], unique=True,
+                                    null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -49,3 +36,18 @@ class User(AbstractBaseUser, PermissionsMixin):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+
+class Order(models.Model):
+    address = models.TextField(verbose_name='Адрес доставки')
+    city = models.TextField(verbose_name='Город доставки')
+    country = models.TextField(verbose_name='Страна доставки')
+    customer = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='Заказчик')
+
+
+    class Meta:
+        verbose_name_plural = 'Заказы'
+        verbose_name = 'Заказ'
+
+    def __str__(self):
+        return self.address
