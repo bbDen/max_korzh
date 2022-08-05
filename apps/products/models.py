@@ -32,8 +32,7 @@ class Product(models.Model):
     gender = models.CharField(max_length=50, verbose_name='Пол', null=True)
     sale = models.IntegerField(null=True, verbose_name='Скидка', blank=True)
     new = models.BooleanField(default=True)
-    sizes = models.CharField(choices=SizeChoices, default=SizeChoices[1][1], max_length=5)
-
+    sizes = ['XXS', 'XS', 'S', 'M', 'L', 'XL']
     class Meta:
         verbose_name_plural = 'Товары'
         verbose_name = 'Товар'

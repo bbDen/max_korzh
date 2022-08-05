@@ -18,7 +18,7 @@ User = get_user_model()
 
 
 class ProductsListAPIView(generics.ListCreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['price', 'category']
     serializer_class = ProductSerializer
@@ -76,6 +76,9 @@ class ProductCategoriesListAPIView(generics.ListCreateAPIView):
 
 class ProductCategoriesAPIView(RetrieveAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['title']
+    ordering_fields = ['price', 'title']
 
     def get(self, request, pk):
         try:
@@ -114,7 +117,7 @@ class CommentListAPIView(generics.ListCreateAPIView):
 
 
 class CommentRetrieveAPIView(RetrieveAPIView):
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get(self, request, pk):
         try:
@@ -134,7 +137,7 @@ class CommentRetrieveAPIView(RetrieveAPIView):
 
 
 class OrdersListAPIView(generics.ListCreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
 
@@ -148,7 +151,3 @@ class OrdersListAPIView(generics.ListCreateAPIView):
         message = 'Hello world'
         send_email_to_user(email=srz.validated_data['customer'], message=message)
         return Response(srz.data, status=status.HTTP_200_OK)
-        #     return Response(srz.data, status=status.HTTP_201_CREATED)
-        # else:
-        #     return Response(srz.errors, status=status.HTTP_400_BAD_REQUEST)
-
