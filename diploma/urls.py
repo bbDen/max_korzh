@@ -12,7 +12,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from apps.music.views import MusicListAPIView
 from apps.products.views import ProductsListAPIView, ProductCategoriesAPIView, ProductRetrieveAPIView, \
     ProductCategoriesListAPIView, CommentListAPIView, CommentRetrieveAPIView, OrdersListAPIView
-from apps.users.views import CustomAuthToken, RegisterUser, UserRetrieveUpdateAPIView, UsersListAPIView, \
+from apps.users.views import CustomAuthToken, RegisterUserView, UserRetrieveUpdateAPIView, UsersListAPIView, \
     ChangePasswordView
 
 schema_view = get_schema_view(
@@ -40,7 +40,7 @@ urlpatterns = [
     path('api/v1/comments/', CommentListAPIView.as_view()),
     path('api/v1/comments/<int:pk>', CommentRetrieveAPIView.as_view()),
     path('api-token-auth/', CustomAuthToken.as_view()),
-    path('api/v1/registration/', RegisterUser.as_view()),
+    path('api/v1/registration/', RegisterUserView.as_view()),
     path('api/v1/users/', UserRetrieveUpdateAPIView.as_view()),
     path('api/v1/user/', UsersListAPIView.as_view()),
     path('api/v1/changepassword/', ChangePasswordView.as_view()),

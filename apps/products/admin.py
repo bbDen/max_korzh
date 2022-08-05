@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from apps.products.models import Product, ProductCategory
-#from apps.users.models import Order
+from apps.users.models import Order
 
 
 @admin.register(Product)
@@ -14,6 +14,6 @@ class ProductCategoriesAdmin(admin.ModelAdmin):
     pass
 
 
-# @admin.register(Order)
-# class MusicAdmin(admin.ModelAdmin):
-#     pass
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    pass

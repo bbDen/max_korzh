@@ -33,7 +33,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'username', 'password', 'email', 'first_name', 'last_name', 'phone_number', 'date_of_birth'
+            'username', 'password', 'email', 'first_name',
+            'last_name', 'phone_number', 'date_of_birth'
         ]
 
     def save(self):
@@ -53,7 +54,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'username', 'password', 'email', 'first_name', 'last_name', 'phone_number', 'date_of_birth'
+            'username', 'password', 'email', 'first_name',
+            'last_name', 'phone_number', 'date_of_birth'
         ]
 
 
@@ -90,6 +92,10 @@ class UserAuthSerializer(serializers.Serializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    customer = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
     class Meta:
         model = Order
         fields = (
@@ -97,6 +103,20 @@ class OrderSerializer(serializers.ModelSerializer):
         )
 
     def to_representation(self, instance):
+
         repres = super(OrderSerializer, self).to_representation(instance)
         repres['customer'] = instance.customer.email
         return repres
+
+
+# # 1.
+# d1 = {'address': 'Bisdkek jkasl;dfj', 'country': 'Kg'}
+# srz = OrderSerializer(data=d1)
+# srz.save()
+#
+# # 2.
+#
+# order = Order.objects.first()
+# srz_1 = OrderSerializer(instance=order)
+# srz_1.data
+#

@@ -39,22 +39,24 @@ class ChangePasswordView(generics.UpdateAPIView):
         return Response({'response': "Password changed"})
 
 
-class RegisterUser(APIView):
+class RegisterUserView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
         srz = RegistrationSerializer(data=request.data)
-        if srz.is_valid():
-            srz.save()
-            return Response({'response': "Registered",
-                             'username': srz.data['username'],
-                             'email': srz.data['email'],
-                             'first_name': srz.data['first_name'],
-                             'last_name': srz.data['last_name'],
-                             'phone_number': srz.data['phone_number'],
-                             'date_of_birth': srz.data['date_of_birth']})
-        else:
-            return Response(data=srz.errors)
+
+        srz.is_valid(raise_exception=True)
+        user = srz.save()
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'response': "Registered",
+                         'username': srz.data['username'],
+                         'email': srz.data['email'],
+                         'first_name': srz.data['first_name'],
+                         'last_name': srz.data['last_name'],
+                         'phone_number': srz.data['phone_number'],
+                         'date_of_birth': srz.data['date_of_birth'],
+                         'token': token.key}
+                        )
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):

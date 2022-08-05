@@ -12,9 +12,11 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'title', 'category', 'image', 'price', 'quantity', 'created_at', 'description', 'gender',
-                  'sizes', 'sale', 'new'
-                  )
+        fields = (
+            'id', 'title', 'category', 'image',
+            'price', 'quantity', 'created_at', 'description',
+            'gender', 'sizes', 'sale', 'new'
+            )
 
     def get_image(self, obj):
         try:
@@ -47,11 +49,16 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class ProductCategoriesSerializer(serializers.ModelSerializer):
-    products = ProductSerializer(read_only=True, many=True)
+    # products = ProductSerializer(read_only=True, many=True)
+    products = serializers.SerializerMethodField()
 
     class Meta:
         model = ProductCategory
         fields = ('id', 'title', 'products')
+
+    def get_products(self, instance: ProductCategory):
+        product_qs = instance.products.order_by(self.context['order_value'])
+        return ProductSerializer(instance=product_qs, many=True).data
 
 
 class RegistrationSerializer(serializers.ModelSerializer):

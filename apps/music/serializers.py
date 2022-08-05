@@ -16,6 +16,3 @@ class MusicSerializer(serializers.ModelSerializer):
         except:
             music = None
         return music
-
-
-

@@ -1,5 +1,7 @@
 from django.conf import settings
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, AbstractUser
+from django.contrib.auth.models import (
+    AbstractBaseUser, PermissionsMixin
+)
 
 from django.db import models
 from django.db.models.signals import post_save
@@ -43,7 +45,6 @@ class Order(models.Model):
     city = models.TextField(verbose_name='Город доставки')
     country = models.TextField(verbose_name='Страна доставки')
     customer = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='Заказчик')
-
 
     class Meta:
         verbose_name_plural = 'Заказы'

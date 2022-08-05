@@ -81,11 +81,13 @@ class ProductCategoriesAPIView(RetrieveAPIView):
     ordering_fields = ['price', 'title']
 
     def get(self, request, pk):
+        sort_by = request.GET.get('ordering', None)
         try:
-            product = ProductCategory.objects.get(id=pk)
+            category = ProductCategory.objects.get(id=pk)
         except ProductCategory.DoesNotExist:
             return Response({'msg': 'product not found'}, status=status.HTTP_404_NOT_FOUND)
-        srz = ProductCategoriesSerializer(product, many=False)
+        srz = ProductCategoriesSerializer(category, many=False,
+                                          context={'order_value': sort_by})
         return Response(srz.data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
@@ -142,12 +144,9 @@ class OrdersListAPIView(generics.ListCreateAPIView):
     queryset = Order.objects.all()
 
     def post(self, request):
-        request_body = request.data
-        srz = OrderSerializer(data=request_body)
-        if srz.is_valid():
-            srz.save()
-        else:
-            return False
+        srz = OrderSerializer(data=request.data, context={'request': request})
+        srz.is_valid(raise_exception=True)
+        srz.save()
         message = 'Hello world'
         send_email_to_user(email=srz.validated_data['customer'], message=message)
         return Response(srz.data, status=status.HTTP_200_OK)
