@@ -60,7 +60,7 @@ class ProductCategoriesListAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title']
-    ordering_fields = ['title']
+    ordering_fields = ['title', 'products']
     serializer_class = ProductCategoriesSerializer
     queryset = ProductCategory.objects.all()
 
