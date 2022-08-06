@@ -25,6 +25,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=15, validators=[validate_international_phonenumber], unique=True,
                                     null=True)
 
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
@@ -45,6 +46,7 @@ class Order(models.Model):
     city = models.TextField(verbose_name='Город доставки')
     country = models.TextField(verbose_name='Страна доставки')
     customer = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='Заказчик')
+    postcode = models.CharField(max_length=10, null=True)
 
     class Meta:
         verbose_name_plural = 'Заказы'

@@ -95,11 +95,12 @@ class OrderSerializer(serializers.ModelSerializer):
     customer = serializers.HiddenField(
         default=serializers.CurrentUserDefault()
     )
+    postcode = serializers.CharField(min_length=4, max_length=10)
 
     class Meta:
         model = Order
         fields = (
-            'address', 'country', 'city', 'customer'
+            'address', 'country', 'city', 'customer', 'postcode'
         )
 
     def to_representation(self, instance):
@@ -107,16 +108,3 @@ class OrderSerializer(serializers.ModelSerializer):
         repres = super(OrderSerializer, self).to_representation(instance)
         repres['customer'] = instance.customer.email
         return repres
-
-
-# # 1.
-# d1 = {'address': 'Bisdkek jkasl;dfj', 'country': 'Kg'}
-# srz = OrderSerializer(data=d1)
-# srz.save()
-#
-# # 2.
-#
-# order = Order.objects.first()
-# srz_1 = OrderSerializer(instance=order)
-# srz_1.data
-#
