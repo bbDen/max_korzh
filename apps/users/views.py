@@ -5,14 +5,15 @@ from rest_framework import status, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.generics import RetrieveUpdateAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.products.models import Product
 from apps.users.models import OrderItem, Order
 from apps.users.serializers import (
     UserSerializer, UserAuthSerializer, ChangePasswordSerializer,
-    RegistrationSerializer, OrderItemSerializer)
+    RegistrationSerializer, OrderItemSerializer, OrderSerializer)
 from apps.users.services import send_email_to_user
 
 User = get_user_model()
@@ -85,8 +86,9 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
 
 
 class OrderItemView(generics.ListCreateAPIView):
-    queryset = OrderItem.objects.all()
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = OrderItemSerializer
+    queryset = OrderItem.objects.all()
 
     def post(self, request, *args, **kwargs):
         """
@@ -96,22 +98,28 @@ class OrderItemView(generics.ListCreateAPIView):
          "totalPrice": 23456789
          }
         """
-        srz = OrderItemSerializer(data=request.data)
-        srz.is_valid(raise_exception=True)
-        order = Order.objects.create(address=srz.validated_data['address'],
-                                     city=srz.validated_data['city'],
-                                     country=srz.validated_data['country'],
-                                     postcode=srz.validated_data['postcode'],
-                                     customer=srz.validated_data['customer'])
-        for item in srz.validated_data['cart']:
-            OrderItem.objects.create(order=order, product=item['product'])
 
-        total_price = request.data['totalPrice']
+        srz = OrderSerializer(data=request.data, context={'request': request})
+        srz.is_valid(raise_exception=True)
+        order = srz.save()
+
+        for item in request.data['cart']:
+            print('---------------------------------------------')
+            print(int(item['id']))
+            print('---------------------------------------------')
+            product = Product.objects.get(id=int(item['id']))
+            print('product  ---------------------------------------------')
+            print(type(product))
+            print('---------------------------------------------')
+
+            OrderItem.objects.create(order=order, product=product, product_price=product.price)
+
+        total_price = request.data['product_price']
 
         message = f'Здравствуйте! Спасибо, что заказали товар у нас. Номер вашего заказа ' \
-                  f'{id(order)}.Сумма заказа {total_price}.' \
+                  f'{order.pk}.Сумма заказа {total_price}.' \
                   f'Оплата прошла успешно, ожидайте заказ! Срок доставки' \
                   f' от 15 до 30 дней. '
-        send_email_to_user(email=srz.validated_data['customer'], message=message)
-        return Response(srz.data, status=status.HTTP_200_OK)
+        send_email_to_user(email=srz.data['customer'], message=message)
+        return Response(data={'Response': 'Success'}, status=status.HTTP_200_OK)
 

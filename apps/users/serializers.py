@@ -94,16 +94,11 @@ class UserAuthSerializer(serializers.Serializer):
 
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
-        Model = OrderItem
+        model = OrderItem
         fields = (
             'order', 'product', 'product_price'
         )
 
-    def to_representation(self, instance):
-        repres = super(OrderItemSerializer, self).to_representation(instance)
-        repres['order'] = instance.order.adress
-        repres['product'] = instance.product.title
-        return repres
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -111,12 +106,11 @@ class OrderSerializer(serializers.ModelSerializer):
         default=serializers.CurrentUserDefault()
     )
     postcode = serializers.CharField(min_length=4, max_length=10)
-    order_items = ProductSerializer(many=True)
 
     class Meta:
         model = Order
         fields = (
-            'address', 'country', 'city', 'customer', 'postcode', 'order_items',
+            'address', 'country', 'city', 'customer', 'postcode',
         )
 
     def to_representation(self, instance):
@@ -124,8 +118,5 @@ class OrderSerializer(serializers.ModelSerializer):
         repres = super(OrderSerializer, self).to_representation(instance)
         repres['customer'] = instance.customer.email
         return repres
-
-#
-# class OrderSerializer
 
 

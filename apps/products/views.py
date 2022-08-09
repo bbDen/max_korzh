@@ -131,6 +131,12 @@ class OrdersListAPIView(generics.ListCreateAPIView):
     def post(self, request):
         srz = OrderSerializer(data=request.data, context={'request': request})
         srz.is_valid(raise_exception=True)
-        srz.save()
-
+        order = srz.save()
+        total_price = request.data['product_price']
+        message = f'Здравствуйте! Спасибо, что заказали товар у нас. Номер вашего заказа ' \
+                  f'{order.pk}.Сумма заказа {total_price}.' \
+                  f'Оплата прошла успешно, ожидайте заказ! Срок доставки' \
+                  f' от 15 до 30 дней. '
+        send_email_to_user(email=srz.data['customer'], message=message)
+        return Response(data={'Response': 'Success'}, status=status.HTTP_200_OK)
 
