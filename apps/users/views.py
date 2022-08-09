@@ -96,7 +96,7 @@ class OrderItemView(generics.ListCreateAPIView):
          "totalPrice": 23456789
          }
         """
-        srz = OrderItemSerializer()
+        srz = OrderItemSerializer(data=request.data)
         srz.is_valid(raise_exception=True)
         order = Order.objects.create(address=srz.validated_data['address'],
                                      city=srz.validated_data['city'],
