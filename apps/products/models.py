@@ -1,10 +1,8 @@
-import datetime
-
 from django.contrib.auth import get_user_model
 from django.db import models
 
 
-User = get_user_model()
+
 
 
 class ProductCategory(models.Model):
@@ -43,6 +41,7 @@ class Product(models.Model):
 
 class Comment(models.Model):
     """Модель для комментариев """
+    User = get_user_model()
     post = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='Автор комментария')
     content = models.TextField(max_length=255, verbose_name='Текст комментария')

@@ -1,3 +1,5 @@
+import random
+
 from django.http import JsonResponse, HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -38,6 +40,7 @@ class ProductsListAPIView(generics.ListCreateAPIView):
 
 class ProductRetrieveAPIView(RetrieveAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Product.objects.all()
 
     def get(self, request, pk):
         try:
@@ -79,6 +82,8 @@ class ProductCategoriesAPIView(RetrieveAPIView):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['title']
     ordering_fields = ['price', 'title']
+    serializer_class = ProductCategoriesSerializer
+    queryset = ProductCategory.objects.all()
 
     def get(self, request, pk):
         sort_by = request.GET.get('ordering', None)
@@ -118,26 +123,6 @@ class CommentListAPIView(generics.ListCreateAPIView):
             return Response(srz.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CommentRetrieveAPIView(RetrieveAPIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-    def get(self, request, pk):
-        try:
-            product = Comment.objects.get(id=pk)
-        except Comment.DoesNotExist:
-            return Response({'msg': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
-        srz = CommentSerializer(product, many=False)
-        return Response(srz.data, status=status.HTTP_200_OK)
-
-    def delete(self, request, pk):
-        try:
-            product = Comment.objects.get(id=pk)
-        except Comment.DoesNotExist:
-            return JsonResponse({'msg': 'Comment not found'}, status=status.HTTP_404_NOT_FOUND)
-        product.delete()
-        return HttpResponse(status=status.HTTP_204_NO_CONTENT)
-
-
 class OrdersListAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = OrderSerializer
@@ -147,6 +132,5 @@ class OrdersListAPIView(generics.ListCreateAPIView):
         srz = OrderSerializer(data=request.data, context={'request': request})
         srz.is_valid(raise_exception=True)
         srz.save()
-        message = 'Hello world'
-        send_email_to_user(email=srz.validated_data['customer'], message=message)
-        return Response(srz.data, status=status.HTTP_200_OK)
+
+

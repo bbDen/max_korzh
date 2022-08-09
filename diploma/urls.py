@@ -9,11 +9,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-from apps.music.views import MusicListAPIView
+from apps.music.views import MusicListAPIView, MusicFileGetAPIView
 from apps.products.views import ProductsListAPIView, ProductCategoriesAPIView, ProductRetrieveAPIView, \
-    ProductCategoriesListAPIView, CommentListAPIView, CommentRetrieveAPIView, OrdersListAPIView
-from apps.users.views import CustomAuthToken, RegisterUserView, UserRetrieveUpdateAPIView, UsersListAPIView, \
-    ChangePasswordView
+    ProductCategoriesListAPIView, CommentListAPIView, OrdersListAPIView
+from apps.users.views import CustomAuthToken, RegisterUserView, UserRetrieveUpdateAPIView, ChangePasswordView
+
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -38,13 +38,12 @@ urlpatterns = [
     path('api/v1/categories/', ProductCategoriesListAPIView.as_view()),
     path('api/v1/categories/<int:pk>/', ProductCategoriesAPIView.as_view()),
     path('api/v1/comments/', CommentListAPIView.as_view()),
-    path('api/v1/comments/<int:pk>', CommentRetrieveAPIView.as_view()),
     path('api-token-auth/', CustomAuthToken.as_view()),
     path('api/v1/registration/', RegisterUserView.as_view()),
     path('api/v1/users/', UserRetrieveUpdateAPIView.as_view()),
-    path('api/v1/user/', UsersListAPIView.as_view()),
     path('api/v1/changepassword/', ChangePasswordView.as_view()),
     path('api/v1/music/', MusicListAPIView.as_view()),
+    path('custom-media/', MusicFileGetAPIView.as_view()),
     path('api/v1/createorder/', OrdersListAPIView.as_view())
 ]
 

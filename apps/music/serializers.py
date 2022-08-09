@@ -8,7 +8,7 @@ class MusicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Music
-        fields = '__all__'
+        fields = ['title', 'track']
 
     def get_music(self, obj):
         try:
