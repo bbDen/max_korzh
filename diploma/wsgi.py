@@ -15,5 +15,3 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'diploma.settings')
 
 application = get_wsgi_application()
 
-
-SECRET_KEY = os.environ['SECRET_KEY']
