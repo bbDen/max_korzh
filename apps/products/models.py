@@ -2,9 +2,6 @@ from django.contrib.auth import get_user_model
 from django.db import models
 
 
-
-
-
 class ProductCategory(models.Model):
     """Модель для категорий продуктов"""
     title = models.CharField(max_length=50, unique=True, verbose_name='Заголовок')
@@ -37,28 +34,3 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class Comment(models.Model):
-    """Модель для комментариев """
-    User = get_user_model()
-    post = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='comments')
-    author = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='Автор комментария')
-    content = models.TextField(max_length=255, verbose_name='Текст комментария')
-    created_at = models.DateTimeField(auto_now_add=True)
-    parent = models.ForeignKey(to='self', null=True, blank=True, on_delete=models.CASCADE)
-
-    class Meta:
-        ordering = ('-created_at',)
-
-    def __str__(self):
-        return f'Comment by {self.author.email} on {self.post}'
-
-    def children(self):
-        return Comment.objects.filter(parent=self)
-
-    @property
-    def is_parent(self):
-        if self.parent is not None:
-            return False
-        return True

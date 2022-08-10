@@ -1,20 +1,18 @@
-import random
 
 from django.http import JsonResponse, HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework import status, generics, filters
 from rest_framework.generics import RetrieveAPIView
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from django.contrib.auth import get_user_model
 
-from apps.products.models import Product, ProductCategory, Comment
-from apps.products.serializers import ProductSerializer, ProductCategoriesSerializer, CommentSerializer
-from apps.users.models import Order
-from apps.users.serializers import OrderSerializer
-from apps.users.services import send_email_to_user
+from apps.products.models import Product, ProductCategory
+from apps.products.serializers import ProductSerializer, ProductCategoriesSerializer
+
+
 
 User = get_user_model()
 
@@ -102,41 +100,3 @@ class ProductCategoriesAPIView(RetrieveAPIView):
             return JsonResponse({'msg': 'product not found'}, status=status.HTTP_404_NOT_FOUND)
         product.delete()
         return HttpResponse(status=status.HTTP_204_NO_CONTENT)
-
-
-class CommentListAPIView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['post']
-    serializer_class = CommentSerializer
-    search_fields = ['post']
-    ordering_fields = ['id', 'created_at']
-    queryset = Comment.objects.all()
-
-    def post(self, request):
-        request_body = request.data
-        srz = CommentSerializer(data=request_body)
-        if srz.is_valid():
-            srz.save()
-            return Response(srz.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(srz.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class OrdersListAPIView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    serializer_class = OrderSerializer
-    queryset = Order.objects.all()
-
-    def post(self, request):
-        srz = OrderSerializer(data=request.data, context={'request': request})
-        srz.is_valid(raise_exception=True)
-        order = srz.save()
-        total_price = request.data['product_price']
-        message = f'Здравствуйте! Спасибо, что заказали товар у нас. Номер вашего заказа ' \
-                  f'{order.pk}.Сумма заказа {total_price}.' \
-                  f'Оплата прошла успешно, ожидайте заказ! Срок доставки' \
-                  f' от 15 до 30 дней. '
-        send_email_to_user(email=srz.data['customer'], message=message)
-        return Response(data={'Response': 'Success'}, status=status.HTTP_200_OK)
-

@@ -1,6 +1,5 @@
-import random
-
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from rest_framework import status, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -10,10 +9,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.products.models import Product
-from apps.users.models import OrderItem, Order
+from apps.users.models import OrderItem
 from apps.users.serializers import (
     UserSerializer, UserAuthSerializer, ChangePasswordSerializer,
-    RegistrationSerializer, OrderItemSerializer, OrderSerializer)
+    RegistrationSerializer, OrderItemSerializer, OrderSerializer
+)
 from apps.users.services import send_email_to_user
 
 User = get_user_model()
@@ -91,35 +91,28 @@ class OrderItemView(generics.ListCreateAPIView):
     queryset = OrderItem.objects.all()
 
     def post(self, request, *args, **kwargs):
-        """
-        {
-        "address": "isanova", "city": "Bihskek",
-         "cart": [{"id": 12, "size": "XL"}, {"id": 32, "size": "XL"}]
-         "totalPrice": 23456789
-         }
-        """
+        with transaction.atomic():
+            srz = OrderSerializer(data=request.data, context={'request': request})
+            srz.is_valid(raise_exception=True)
+            order = srz.save()
 
-        srz = OrderSerializer(data=request.data, context={'request': request})
-        srz.is_valid(raise_exception=True)
-        order = srz.save()
+            for item in request.data['cart']:
+                quantity = item['itemsInCartCount']
+                size = item['sizes']
+                product = Product.objects.get(id=int(item['id']))
+                OrderItem.objects.create(
+                    order=order,
+                    product=product,
+                    product_price=product.price,
+                    product_quantity=quantity,
+                    product_size=size)
 
-        for item in request.data['cart']:
-            print('---------------------------------------------')
-            print(int(item['id']))
-            print('---------------------------------------------')
-            product = Product.objects.get(id=int(item['id']))
-            print('product  ---------------------------------------------')
-            print(type(product))
-            print('---------------------------------------------')
+            total_price = request.data['product_price']
 
-            OrderItem.objects.create(order=order, product=product, product_price=product.price)
-
-        total_price = request.data['product_price']
-
-        message = f'Здравствуйте! Спасибо, что заказали товар у нас. Номер вашего заказа ' \
-                  f'{order.pk}.Сумма заказа {total_price}.' \
-                  f'Оплата прошла успешно, ожидайте заказ! Срок доставки' \
-                  f' от 15 до 30 дней. '
-        send_email_to_user(email=srz.data['customer'], message=message)
-        return Response(data={'Response': 'Success'}, status=status.HTTP_200_OK)
+            message = f'Здравствуйте! Спасибо, что заказали товар у нас. Номер вашего заказа ' \
+                      f'{order.pk}.Сумма заказа {total_price}.' \
+                      f'Оплата прошла успешно, ожидайте заказ! Срок доставки' \
+                      f' от 15 до 30 дней. '
+            send_email_to_user(email=srz.data['customer'], message=message)
+            return Response(data={'Response': 'Success'}, status=status.HTTP_200_OK)
 

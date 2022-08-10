@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
-from apps.products.models import Comment, Product, ProductCategory
+from apps.products.models import Product, ProductCategory
 
 User = get_user_model()
 
@@ -29,23 +29,6 @@ class ProductSerializer(serializers.ModelSerializer):
         repres = super(ProductSerializer, self).to_representation(instance)
         repres['category'] = instance.category.title
         return repres
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    reply_count = SerializerMethodField()
-    author = SerializerMethodField()
-
-    class Meta:
-        model = Comment
-        fields = ('content', 'parent', 'author', 'reply_count', 'post')
-
-    def get_reply_count(self, obj):
-        if obj.is_parent:
-            return obj.children().count()
-        return 0
-
-    def get_author(self, obj):
-        return obj.author.username
 
 
 class ProductCategoriesSerializer(serializers.ModelSerializer):

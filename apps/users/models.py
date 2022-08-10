@@ -62,13 +62,6 @@ class OrderItem(models.Model):
     order = models.ForeignKey(to=Order, on_delete=models.CASCADE, related_name='order_items')
     product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='order_items')
     product_price = models.IntegerField()
+    product_quantity = models.IntegerField(null=True)
+    product_size = models.CharField(max_length=10, null=True)
 
-
-# request_body = [{'product': 12, 'size': 'XL'}, {'product': 435, 'size': 'XXl'}]
-#
-# p1=Product.objects.get(id=12)
-# p2=Product.objects.get(id=435)
-#
-# order = Order.objects.create(country='aklsdjf', address='akljsdf;lja')
-# item = OrderItem.objects.create(order=order, product=p1, )
-# item = OrderItem.objects.create(order=order, product=p2)
