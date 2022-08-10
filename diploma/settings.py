@@ -1,8 +1,10 @@
+from diploma.secret import *
 import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 LOGGING = {
     'version': 1,
@@ -27,7 +29,7 @@ LOGGING = {
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-stiov+84od!kfx^)igmzy=7h)r9-)vj!1@!8(eg@101oxabw$0'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -186,11 +188,3 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 AUTH_USER_MODEL = 'users.User'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'denistestemail313@gmail.com'
-EMAIL_HOST_PASSWORD = 'kqowgbgtbzkyciuo'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'Reset password <noreply@denis_meshcheriakov.com>'
