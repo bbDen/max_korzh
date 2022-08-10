@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from rest_framework.fields import SerializerMethodField
 
 from apps.products.models import Product, ProductCategory
 
@@ -59,7 +58,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['email', 'username', 'password', 'token']
-
+        fields = ('email', 'username', 'password', 'token')
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)

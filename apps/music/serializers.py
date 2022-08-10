@@ -1,18 +1,26 @@
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
-from apps.music.models import Music
+from apps.music.models import Music, Video
 
 
 class MusicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Music
-        fields = ['title', 'track']
+        fields = ('title', 'track')
 
-    def get_music(self, obj):
+
+
+class VideoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Video
+        fields = '__all__'
+
+    def get_video(self, obj):
         try:
-            music = obj.music.url
+            video = obj.video.url
         except:
-            music = None
-        return music
+            video = None
+        return video

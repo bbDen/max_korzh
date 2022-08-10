@@ -8,13 +8,11 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticate
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.products.models import Product
-from apps.users.models import OrderItem
 from apps.users.serializers import (
     UserSerializer, UserAuthSerializer, ChangePasswordSerializer,
-    RegistrationSerializer, OrderItemSerializer, OrderSerializer
+    RegistrationSerializer
 )
-from apps.users.services import send_email_to_user
+
 
 User = get_user_model()
 
@@ -84,35 +82,4 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK, )
 
-
-class OrderItemView(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    serializer_class = OrderItemSerializer
-    queryset = OrderItem.objects.all()
-
-    def post(self, request, *args, **kwargs):
-        with transaction.atomic():
-            srz = OrderSerializer(data=request.data, context={'request': request})
-            srz.is_valid(raise_exception=True)
-            order = srz.save()
-
-            for item in request.data['cart']:
-                quantity = item['itemsInCartCount']
-                size = item['sizes']
-                product = Product.objects.get(id=int(item['id']))
-                OrderItem.objects.create(
-                    order=order,
-                    product=product,
-                    product_price=product.price,
-                    product_quantity=quantity,
-                    product_size=size)
-
-            total_price = request.data['product_price']
-
-            message = f'Здравствуйте! Спасибо, что заказали товар у нас. Номер вашего заказа ' \
-                      f'{order.pk}.Сумма заказа {total_price}.' \
-                      f'Оплата прошла успешно, ожидайте заказ! Срок доставки' \
-                      f' от 15 до 30 дней. '
-            send_email_to_user(email=srz.data['customer'], message=message)
-            return Response(data={'Response': 'Success'}, status=status.HTTP_200_OK)
 
