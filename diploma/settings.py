@@ -1,10 +1,11 @@
-from diploma.secret import *
+
 import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = os.environ.get('SECRETKEY')
 
 # LOGGING = {
 #     'version': 1,
@@ -41,8 +42,8 @@ CORS_ALLOWED_ORIGINS = [
     'https://max-korzh-merch.herokuapp.com',
     "http://localhost:3000",
     "http://192.168.89.110:3000",
-    'https://jalolo13.vercel.app/',
-    'https://jalolo13-jalolo13.vercel.app/'
+    'https://jalolo13.vercel.app',
+    'https://jalolo13-jalolo13.vercel.app'
 ]
 CORS_ALLOW_METHODS = [
     'DELETE',
