@@ -23,3 +23,5 @@ Not Found: /
 Session data corrupted
 Session data corrupted
 Session data corrupted
+Not Found: /
+"GET / HTTP/1.1" 404 4065

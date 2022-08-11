@@ -44,7 +44,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://192.168.89.110:3000",
     'https://jalolo13.vercel.app',
-    'https://jalolo13-jalolo13.vercel.app'
+    'https://maxkorzhshop.vercel.app'
 ]
 CORS_ALLOW_METHODS = [
     'DELETE',
