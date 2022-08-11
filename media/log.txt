@@ -16,3 +16,10 @@ Not Found: /
 "GET / HTTP/1.1" 404 4065
 Not Found: /
 "GET / HTTP/1.1" 404 4065
+Not Found: /
+"GET / HTTP/1.1" 404 4065
+Not Found: /
+"GET / HTTP/1.1" 404 4065
+Session data corrupted
+Session data corrupted
+Session data corrupted
