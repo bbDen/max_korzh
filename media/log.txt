@@ -3,3 +3,10 @@ Not Found: /
 "GET / HTTP/1.1" 404 4065
 Not Found: /
 "GET / HTTP/1.1" 404 4065
+Not Found: /apiv1/music/
+"GET /apiv1/music/ HTTP/1.1" 404 4228
+Not Found: /apiv1/music/
+"GET /apiv1/music/ HTTP/1.1" 404 4228
+"GET / HTTP/1.1" 500 59
+Not Found: /
+"GET / HTTP/1.1" 404 4065

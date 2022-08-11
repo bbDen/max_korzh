@@ -9,7 +9,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-from apps.music.views import MusicListAPIView, VideoAPIView
+from apps.music.views import MusicListAPIView
 from apps.products.views import ProductsListAPIView, ProductCategoriesAPIView, ProductRetrieveAPIView, \
     ProductCategoriesListAPIView, OrderItemView
 from apps.users.views import CustomAuthToken, RegisterUserView, UserRetrieveUpdateAPIView, ChangePasswordView
@@ -41,8 +41,7 @@ urlpatterns = [
     path('api/v1/users/', UserRetrieveUpdateAPIView.as_view()),
     path('api/v1/changepassword/', ChangePasswordView.as_view()),
     path('api/v1/music/', MusicListAPIView.as_view()),
-    path('api/v1/createorder/', OrderItemView.as_view()),
-    path('get-video', VideoAPIView.as_view())
+    path('api/v1/createorder/', OrderItemView.as_view())
 ]
 
 urlpatterns += staticfiles_urlpatterns()

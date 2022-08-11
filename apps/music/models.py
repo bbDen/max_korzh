@@ -12,12 +12,3 @@ class Music(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class Video(models.Model):
-    """модель для фонового видео"""
-    video = models.FileField()
-
-    class Meta:
-        verbose_name_plural = 'Видео'
-        verbose_name = 'Видео'

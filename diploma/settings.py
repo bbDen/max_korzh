@@ -1,11 +1,8 @@
 import os
 from pathlib import Path
-
+from diploma.secret import *
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-SECRET_KEY = 'django-insecure-stiov+84od!kfx^)igmzy=7h)r9-)vj!1@!8(eg@101oxabw$0'
-
 
 LOGGING = {
     'version': 1,
