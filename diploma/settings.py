@@ -1,8 +1,12 @@
 import os
 from pathlib import Path
-from diploma.secret import *
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+SECRET_KEY = os.environ.get("SECRET_KEY", "not_a_secret")
+
 
 LOGGING = {
     'version': 1,
